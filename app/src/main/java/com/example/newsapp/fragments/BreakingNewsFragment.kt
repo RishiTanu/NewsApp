@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newsapp.NewsActivity
 import com.example.newsapp.R
@@ -17,17 +19,18 @@ import com.example.newsapp.util.Resource
 
 class BreakingNewsFragment : Fragment() {
 
-    private lateinit var binding: FragmentBreakingNewsBinding
-    lateinit var viewModel: NewsViewModel
+     lateinit var viewModel: NewsViewModel
     lateinit var newsAdapter: NewsAdapter
     val TAG = "BreakingNewsFragment"
+    private var _binding: FragmentBreakingNewsBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentBreakingNewsBinding.inflate(layoutInflater)
+        _binding = FragmentBreakingNewsBinding.inflate(inflater)
         return binding.root
     }
 
@@ -35,6 +38,16 @@ class BreakingNewsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = (activity as NewsActivity).viewModel
         setupRecyclerView()
+
+       newsAdapter.setOnItemCLickListener {
+            val bundle = Bundle().apply {
+                putSerializable("article", it)
+            }
+            findNavController().navigate(
+                R.id.action_breakingNewsFragment_to_articleFragment,
+                bundle
+            )
+        }
 
         viewModel.breakingNews.observe(viewLifecycleOwner, Observer { response ->
             when(response) {
@@ -73,4 +86,8 @@ class BreakingNewsFragment : Fragment() {
         binding.paginationProgressBar.visibility = View.VISIBLE
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

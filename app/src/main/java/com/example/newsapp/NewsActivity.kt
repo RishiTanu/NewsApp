@@ -21,11 +21,10 @@ class NewsActivity : AppCompatActivity() {
         activityNewsBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityNewsBinding.root)
         init()
+
         val newsRepo = NewsRepository(ArticleDatabase(this))
         val newsViewModelProviderFactory = NewsViewModelProviderFactory(newsRepo)
-        viewModel =
-            ViewModelProvider(this, newsViewModelProviderFactory).get(NewsViewModel::class.java)
-
+        viewModel = ViewModelProvider(this, newsViewModelProviderFactory)[NewsViewModel::class.java]
     }
 
     private fun init() {

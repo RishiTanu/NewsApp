@@ -59,7 +59,7 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
 
     private var onItemClickListener: ((Article) -> Unit)? = null
 
-    private fun setOnItemCLickListener(listener: (Article) -> Unit) {
+    fun setOnItemCLickListener(listener: (Article) -> Unit) {
         onItemClickListener = listener
     }
 }
